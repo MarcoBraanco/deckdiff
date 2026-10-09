@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Trocas do Deck</title>
+<title>Deck Diffs</title>
 <meta name="description" content="Veja lado a lado o que saiu e o que entrou no seu deck de Magic, com as artes das cartas, preços e lista de compras. Exporte em PDF ou imagem.">
-<meta property="og:title" content="Trocas do Deck · Deck Swaps">
+<meta property="og:title" content="Deck Diffs">
 <meta property="og:description" content="Mostre o que saiu e o que entrou no seu deck de Magic, carta por carta. / Show what went out and what came in, card by card.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='10' width='26' height='38' rx='4' fill='%23e0715f'/%3E%3Crect x='32' y='16' width='26' height='38' rx='4' fill='%235cbf82'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,6 +101,11 @@ button:disabled { opacity: 0.6; cursor: progress; }
 .stat { display: grid; gap: 4px; }
 .stat .val { font: 500 1.3rem/1 var(--font-mono); font-variant-numeric: tabular-nums; }
 .tools { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.sortbox { display: inline-flex; gap: 8px; align-items: center; }
+select {
+  font: 500 0.88rem/1.2 var(--font-body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; max-width: 100%;
+}
 .check { display: inline-flex; gap: 6px; align-items: center; font-size: 0.85rem; cursor: pointer; color: var(--muted); }
 .empty { color: var(--muted); padding: 40px 0; text-align: center; }
 
@@ -161,7 +166,7 @@ footer a { color: inherit; }
 <div class="app">
   <header class="topbar">
     <div>
-      <h1 data-i18n="title">Trocas do Deck</h1>
+      <h1 data-i18n="title">Deck Diffs</h1>
       <p data-i18n="lede">Uma troca por linha: a carta que saiu, uma seta, e a carta que entrou no lugar dela.</p>
     </div>
     <div class="seg" role="group" aria-label="Idioma / Language">
@@ -193,6 +198,19 @@ footer a { color: inherit; }
       <div class="toolbar">
         <div class="stats" id="stats"></div>
         <div class="tools">
+          <label class="sortbox">
+            <span class="label" data-i18n="sortLabel">Ordenar</span>
+            <select id="sortBy">
+              <option value="list" data-i18n="sortList">Ordem da lista</option>
+              <option value="priceDesc" data-i18n="sortPriceDesc">Preço: maior primeiro</option>
+              <option value="priceAsc" data-i18n="sortPriceAsc">Preço: menor primeiro</option>
+              <option value="toBuy" data-i18n="sortToBuy">A comprar primeiro</option>
+              <option value="name" data-i18n="sortName">Nome (A–Z)</option>
+              <option value="cmc" data-i18n="sortCmc">Custo de mana</option>
+              <option value="color" data-i18n="sortColor">Cor (WUBRG)</option>
+              <option value="type" data-i18n="sortType">Tipo de carta</option>
+            </select>
+          </label>
           <div class="seg" role="group" data-i18n-aria="sizeLabel" aria-label="Tamanho das cartas">
             <button type="button" data-size="s" aria-pressed="false" data-i18n="sizeS">P</button>
             <button type="button" data-size="m" aria-pressed="true">M</button>
@@ -225,7 +243,7 @@ footer a { color: inherit; }
 const I18N = {
   pt: {
     htmlLang: "pt-BR", locale: "pt-BR",
-    title: "Trocas do Deck",
+    title: "Deck Diffs",
     lede: "Uma troca por linha: a carta que saiu, uma seta, e a carta que entrou no lugar dela.",
     deckLabel: "Nome do deck (opcional, vira o título do PDF e da imagem)",
     deckPh: "Ex.: Jace, Multiverse Architect",
@@ -234,6 +252,8 @@ const I18N = {
     hint: 'A seta pode ser <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> ou <code>→</code>. Se só saiu, deixe o lado direito vazio (<code>Cancel --&gt;</code>); se só entrou, o esquerdo (<code>--&gt; Sol Ring</code>). Cada lado aceita quantidade e coleção, como no Moxfield: <code>1 Sol Ring (CMM) 395 *F*</code>. Use os nomes das cartas em inglês. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> também mostra as trocas.',
     emptyState: "As trocas aparecem aqui.",
     sizeLabel: "Tamanho das cartas", sizeS: "P", sizeL: "G",
+    sortLabel: "Ordenar", sortList: "Ordem da lista", sortPriceDesc: "Preço: maior primeiro", sortPriceAsc: "Preço: menor primeiro",
+    sortToBuy: "A comprar primeiro", sortName: "Nome (A–Z)", sortCmc: "Custo de mana", sortColor: "Cor (WUBRG)", sortType: "Tipo de carta",
     pdf: "Baixar PDF", img: "Baixar imagem", copyImg: "Copiar imagem",
     pdfLight: "PDF com fundo claro (para imprimir)",
     buyTitle: "Lista de compras",
@@ -264,18 +284,18 @@ const I18N = {
     imgError: "Não consegui gerar a imagem. Atualize a página e tente de novo.",
     pdfLibError: "Não consegui carregar o gerador de PDF. Confira a conexão e tente de novo.",
     pdfError: "Não consegui gerar o PDF. Atualize a página e tente de novo.",
-    headLabel: "TROCAS DO DECK",
+    headLabel: "DECK DIFFS",
     countTitle: (n) => `${n} ${n === 1 ? "troca" : "trocas"}`,
     footBuy: (n, total) => `Para comprar: ${n} ${n === 1 ? "carta" : "cartas"} · ~${total}`,
     credit: (d) => `${d} · imagens e preços: Scryfall`,
     page: (a, b) => `Página ${a} de ${b}`,
     swapNo: (n) => `TROCA ${n}`,
     pdfOut: "SAI", pdfIn: "ENTRA", pdfLinkLabel: "Ver na Liga Magic",
-    fileSuffix: "trocas",
+    fileSuffix: "deck-diff",
   },
   en: {
     htmlLang: "en", locale: "en-US",
-    title: "Deck Swaps",
+    title: "Deck Diffs",
     lede: "One swap per line: the card that went out, an arrow, and the card that replaced it.",
     deckLabel: "Deck name (optional, becomes the PDF and image title)",
     deckPh: "e.g. Jace, Multiverse Architect",
@@ -284,6 +304,8 @@ const I18N = {
     hint: 'The arrow can be <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> or <code>→</code>. If a card was only cut, leave the right side empty (<code>Cancel --&gt;</code>); if one was only added, leave the left side empty (<code>--&gt; Sol Ring</code>). Each side accepts quantity and set, Moxfield style: <code>1 Sol Ring (CMM) 395 *F*</code>. Use English card names. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> also shows the swaps.',
     emptyState: "Your swaps show up here.",
     sizeLabel: "Card size", sizeS: "S", sizeL: "L",
+    sortLabel: "Sort", sortList: "List order", sortPriceDesc: "Price: high to low", sortPriceAsc: "Price: low to high",
+    sortToBuy: "To buy first", sortName: "Name (A–Z)", sortCmc: "Mana value", sortColor: "Color (WUBRG)", sortType: "Card type",
     pdf: "Download PDF", img: "Download image", copyImg: "Copy image",
     pdfLight: "Light background PDF (for printing)",
     buyTitle: "Shopping list",
@@ -314,17 +336,17 @@ const I18N = {
     imgError: "Couldn't create the image. Reload the page and try again.",
     pdfLibError: "Couldn't load the PDF generator. Check your connection and try again.",
     pdfError: "Couldn't create the PDF. Reload the page and try again.",
-    headLabel: "DECK SWAPS",
+    headLabel: "DECK DIFFS",
     countTitle: (n) => `${n} ${n === 1 ? "swap" : "swaps"}`,
     footBuy: (n, total) => `To buy: ${n} ${n === 1 ? "card" : "cards"} · ~${total}`,
     credit: (d) => `${d} · images and prices: Scryfall`,
     page: (a, b) => `Page ${a} of ${b}`,
     swapNo: (n) => `SWAP ${n}`,
     pdfOut: "OUT", pdfIn: "IN", pdfLinkLabel: "Buy on TCGplayer",
-    fileSuffix: "swaps",
+    fileSuffix: "deck-diff",
   },
 };
-const LANG_KEY = "trocas-deck-lang", SIZE_KEY = "trocas-deck-size", OWNED_KEY = "trocas-deck-owned";
+const LANG_KEY = "deck-diffs-lang", SIZE_KEY = "deck-diffs-size", OWNED_KEY = "deck-diffs-owned", SORT_KEY = "deck-diffs-sort";
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (_) { return d; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} },
@@ -474,6 +496,56 @@ function buyInfo() {
   return { total, list };
 }
 
+/* ---------- Ordenação ---------- */
+// Ordena pela carta que entra; numa troca em que nada entrou, usa a que saiu.
+const SORTS = ["list", "priceDesc", "priceAsc", "toBuy", "name", "cmc", "color", "type"];
+let sortBy = store.get(SORT_KEY, "list");
+if (!SORTS.includes(sortBy)) sortBy = "list";
+const COLOR_ORDER = { W: 0, U: 1, B: 2, R: 3, G: 4 };
+const TYPE_ORDER = ["Creature", "Planeswalker", "Battle", "Instant", "Sorcery", "Artifact", "Enchantment", "Land"];
+const cardFor = (p) => { const e = p.in || p.out; return e ? current.found.get(keyOf(e)) : null; };
+function inPrice(p) {
+  if (!p.in) return null;
+  const pr = priceOf(current.found.get(keyOf(p.in)));
+  return pr == null ? null : pr * p.in.qty;
+}
+function colorRank(c) {
+  if (!c) return 99;
+  const cols = c.colors || c.card_faces?.[0]?.colors || [];
+  if (!cols.length) return 7;                 // incolor (artefatos, terrenos)
+  if (cols.length > 1) return 5 + cols.length / 10; // multicolor
+  return COLOR_ORDER[cols[0]] ?? 6;
+}
+function typeRank(c) {
+  if (!c) return 99;
+  const tl = (c.type_line || "").split("//")[0];
+  const i = TYPE_ORDER.findIndex((x) => tl.includes(x));
+  return i < 0 ? TYPE_ORDER.length : i;
+}
+const buyRank = (p) => (p.in ? (isOwned(p.in) ? 1 : 0) : 2);
+// valores ausentes (sem preço, carta não encontrada) sempre vão para o fim
+const byNum = (a, b, dir) => (a == null && b == null ? 0 : a == null ? 1 : b == null ? -1 : dir * (a - b));
+function viewPairs() {
+  const v = current.pairs.map((p, idx) => ({ p, idx }));
+  const cmp = {
+    list: () => 0,
+    priceDesc: (x, y) => byNum(inPrice(x.p), inPrice(y.p), -1),
+    priceAsc: (x, y) => byNum(inPrice(x.p), inPrice(y.p), 1),
+    toBuy: (x, y) => buyRank(x.p) - buyRank(y.p),
+    name: (x, y) => nameOf(x.p.in || x.p.out).localeCompare(nameOf(y.p.in || y.p.out), t("locale")),
+    cmc: (x, y) => byNum(cardFor(x.p)?.cmc, cardFor(y.p)?.cmc, 1),
+    color: (x, y) => colorRank(cardFor(x.p)) - colorRank(cardFor(y.p)),
+    type: (x, y) => typeRank(cardFor(x.p)) - typeRank(cardFor(y.p)),
+  }[sortBy];
+  return v.sort((x, y) => cmp(x, y) || x.idx - y.idx);
+}
+function setSort(v) {
+  sortBy = SORTS.includes(v) ? v : "list";
+  $("sortBy").value = sortBy;
+  store.set(SORT_KEY, sortBy);
+  if (current.pairs.length) $("swaps").replaceChildren(...viewPairs().map(({ p, idx }) => swapEl(p, idx)));
+}
+
 /* ---------- Tela ---------- */
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 const ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>';
@@ -553,7 +625,7 @@ function renderSummary() {
 }
 
 function render() {
-  $("swaps").replaceChildren(...current.pairs.map(swapEl));
+  $("swaps").replaceChildren(...viewPairs().map(({ p, idx }) => swapEl(p, idx)));
   $("results").hidden = false;
   $("empty").hidden = true;
   renderSummary();
@@ -596,7 +668,7 @@ function loadImg(src) {
 }
 function fileName(ext) {
   const base = norm($("deckName").value || "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return `${base ? base + "-" : ""}${t("fileSuffix")}.${ext}`;
+  return `${base ? base + "-diff" : t("fileSuffix")}.${ext}`;
 }
 function download(blob, name) {
   const url = URL.createObjectURL(blob);
@@ -693,7 +765,8 @@ function drawArrowImg(ctx, cx, cy) {
 }
 
 async function buildImage() {
-  const { pairs } = current;
+  const view = viewPairs();
+  const pairs = view.map((v) => v.p);
   const n = pairs.length;
   const cols = n <= 1 ? 1 : n <= 4 ? 2 : 3;
   const rows = Math.ceil(n / cols);
@@ -723,7 +796,7 @@ async function buildImage() {
     const bx = MARGIN + col * (BLOCK_W + GAP), by = HEAD_H + row * (BLOCK_H + GAP);
     ctx.fillStyle = IMG.panel; rr(ctx, bx, by, BLOCK_W, BLOCK_H, 18); ctx.fill();
     ctx.fillStyle = IMG.muted; ctx.font = `500 16px ${IMG.mono}`; ctx.textAlign = "center";
-    ctx.fillText(String(i + 1).padStart(2, "0"), bx + PAD + CARD_W + ARROW_W / 2, by + PAD);
+    ctx.fillText(String(view[i].idx + 1).padStart(2, "0"), bx + PAD + CARD_W + ARROW_W / 2, by + PAD);
     ctx.textAlign = "left";
     drawCard(ctx, bx + PAD, by + PAD, p.out, "out", imgs[i * 2]);
     drawArrowImg(ctx, bx + PAD + CARD_W + ARROW_W / 2, by + PAD + 36 + CARD_H / 2);
@@ -808,7 +881,8 @@ const PDF_THEMES = {
 };
 
 async function buildPdf(JsPDF) {
-  const { pairs } = current;
+  const view = viewPairs();
+  const pairs = view.map((v) => v.p);
   const PDF = $("pdfLight").checked ? PDF_THEMES.light : PDF_THEMES.dark;
   const doc = new JsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
   const W = 210, H = 297, M = 12, HEAD = 20, FOOT = 10, PER = 3, GAP = 5;
@@ -922,7 +996,7 @@ async function buildPdf(JsPDF) {
       drawSlot(bx + pad, cy, p.out, jpgs[i * 2], "out");
       drawArrow(bx + pad + cardW + arrowW / 2, cy + cardH / 2);
       drawSlot(bx + pad + cardW + arrowW, cy, p.in, jpgs[i * 2 + 1], "in");
-      drawInfo(infoX, cy, i, p);
+      drawInfo(infoX, cy, view[i].idx, p);
     });
 
     const fy = H - M;
@@ -1003,11 +1077,13 @@ $("copyImg").addEventListener("click", (ev) => exportImage("copy", ev.currentTar
 $("deckName").addEventListener("change", () => { if (current.pairs.length) saveHash(); });
 document.querySelectorAll("[data-lang]").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 document.querySelectorAll("[data-size]").forEach((b) => b.addEventListener("click", () => setSize(b.dataset.size)));
+$("sortBy").addEventListener("change", (ev) => setSort(ev.target.value));
 document.addEventListener("keydown", (ev) => { if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") run(); });
 
 (function init() {
   applyLang();
   setSize(store.get(SIZE_KEY, "m"));
+  $("sortBy").value = sortBy;
   let text = EXAMPLE;
   const m = location.hash.match(/d=([A-Za-z0-9_-]+)/);
   if (m) {
