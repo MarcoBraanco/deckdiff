@@ -86,19 +86,6 @@ Opt -->
 - Each side accepts quantity, set and collector number in Moxfield, Archidekt or MTGA format (`1 Sol Ring (CMM) 395 *F*`). Set and number pin the exact printing; without them, the site uses the cheapest printing that has a price.
 - Use **English** card names. Most typos and missing accents are fixed automatically.
 
-### Running locally
-
-No build step and no dependencies. The whole site is `index.html`: download it and open it in your browser.
-
-### Deploying to GitHub Pages
-
-1. Create a repository and push `index.html` to the `main` branch.
-2. Go to **Settings → Pages**.
-3. Under **Source**, pick **Deploy from a branch**, branch `main`, folder `/ (root)`, and save.
-4. After a minute or two the site is live at `https://<your-username>.github.io/<repository-name>/`.
-
-To update it, commit a new version of `index.html`.
-
 ### How it works
 
 - Plain HTML, CSS and JavaScript in a single file. No server or database: each visitor queries the [Scryfall API](https://scryfall.com/docs/api) straight from their own browser.
