@@ -15,7 +15,7 @@ Abra o site, cole suas trocas e pronto: não precisa instalar nem criar conta.
 ### O que ele faz
 
 - Mostra cada troca como **carta que sai → carta que entra**, com as artes oficiais do Scryfall.
-- Calcula o **preço estimado** (USD) do que entrou e monta a **lista de compras**.
+- Calcula o **preço estimado** (USD) do que entrou, sempre pela edição mais barata de cada carta, e monta a **lista de compras**.
 - Marque **"Já tenho"** nas cartas que você já possui: elas saem da lista e do total.
 - **Ordene** as trocas por preço, nome, custo de mana, cor, tipo de carta ou "a comprar primeiro". O PDF e a imagem saem na mesma ordem.
 - Exporta em **PDF** (A4, 3 trocas por página, fundo escuro ou claro) e em **imagem PNG**, prontos para mandar no WhatsApp ou Discord.
@@ -36,7 +36,7 @@ Opt -->
 
 - A seta pode ser `-->`, `->`, `=>` ou `→`.
 - Se uma carta só saiu, deixe o lado direito vazio. Se só entrou, deixe o esquerdo vazio.
-- Cada lado aceita quantidade, coleção e número de colecionador no formato do Moxfield, Archidekt ou MTGA (`1 Sol Ring (CMM) 395 *F*`). Coleção e número fixam a arte exata; sem eles, o site usa a impressão mais barata com preço.
+- Cada lado aceita quantidade, coleção e número de colecionador no formato do Moxfield, Archidekt ou MTGA (`1 Sol Ring (CMM) 395 *F*`). As cartas que entram sempre aparecem na **edição mais barata**, com o preço dela, mesmo que a linha traga outra coleção.
 - Use os nomes das cartas **em inglês**. Erros de digitação e acentos faltando são corrigidos automaticamente na maioria dos casos.
 
 ### Como funciona
@@ -57,7 +57,7 @@ Open the site, paste your swaps and you're done: nothing to install, no account 
 ### Features
 
 - Shows each swap as **card out → card in**, with official card images from Scryfall.
-- Estimates the **price** (USD) of the incoming cards and builds a **shopping list**.
+- Estimates the **price** (USD) of the incoming cards, always using each card's cheapest printing, and builds a **shopping list**.
 - Mark cards as **"I own it"** to drop them from the list and the total.
 - **Sort** swaps by price, name, mana value, color, card type or "to buy first". The PDF and image follow the same order.
 - Exports to **PDF** (A4, 3 swaps per page, dark or light background) and **PNG image**, ready to share on Discord or WhatsApp.
@@ -78,7 +78,7 @@ Opt -->
 
 - The arrow can be `-->`, `->`, `=>` or `→`.
 - For a card that was only cut, leave the right side empty. For one that was only added, leave the left side empty.
-- Each side accepts quantity, set and collector number in Moxfield, Archidekt or MTGA format (`1 Sol Ring (CMM) 395 *F*`). Set and number pin the exact printing; without them, the site uses the cheapest printing that has a price.
+- Each side accepts quantity, set and collector number in Moxfield, Archidekt or MTGA format (`1 Sol Ring (CMM) 395 *F*`). Incoming cards always show the **cheapest printing** and its price, even if the line names a different set.
 - Use **English** card names. Most typos and missing accents are fixed automatically.
 
 ### How it works

@@ -249,7 +249,7 @@ const I18N = {
     deckPh: "Ex.: Jace, Multiverse Architect",
     outWord: "Saiu", inWord: "Entrou",
     go: "Mostrar trocas", share: "Copiar link desta troca",
-    hint: 'A seta pode ser <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> ou <code>→</code>. Se só saiu, deixe o lado direito vazio (<code>Cancel --&gt;</code>); se só entrou, o esquerdo (<code>--&gt; Sol Ring</code>). Cada lado aceita quantidade e coleção, como no Moxfield: <code>1 Sol Ring (CMM) 395 *F*</code>. Use os nomes das cartas em inglês. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> também mostra as trocas.',
+    hint: 'A seta pode ser <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> ou <code>→</code>. Se só saiu, deixe o lado direito vazio (<code>Cancel --&gt;</code>); se só entrou, o esquerdo (<code>--&gt; Sol Ring</code>). Cada lado aceita quantidade e coleção, como no Moxfield: <code>1 Sol Ring (CMM) 395 *F*</code>. As cartas que entram sempre aparecem na edição mais barata, com o preço dela, qualquer que seja a coleção da linha. Use os nomes das cartas em inglês. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> também mostra as trocas.',
     emptyState: "As trocas aparecem aqui.",
     sizeLabel: "Tamanho das cartas", sizeS: "P", sizeL: "G",
     sortLabel: "Ordenar", sortList: "Ordem da lista", sortPriceDesc: "Preço: maior primeiro", sortPriceAsc: "Preço: menor primeiro",
@@ -260,7 +260,7 @@ const I18N = {
     buyHint: "Só o que entrou e você ainda não marcou como \"já tenho\". Pronta para colar na lista de compras da Liga Magic.",
     copyBuy: "Copiar lista",
     buyEmpty: "Nada para comprar. Você já tem tudo que entrou.",
-    footer: 'Dados, imagens e preços das cartas: <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a>. Os preços em dólar são referência; o preço no Brasil está no link da Liga Magic de cada carta. Site sem afiliação com a Wizards of the Coast. Magic: The Gathering e os nomes e artes das cartas são propriedade da Wizards of the Coast.',
+    footer: 'Dados, imagens e preços das cartas: <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a>. Os preços em dólar são da edição mais barata de cada carta e servem de referência; o preço no Brasil está no link da Liga Magic de cada carta. Site sem afiliação com a Wizards of the Coast. Magic: The Gathering e os nomes e artes das cartas são propriedade da Wizards of the Coast.',
     statSwaps: "Trocas", statBuy: "Para comprar", statTotal: "Estimativa", statMissing: "Não encontradas",
     chipOut: "Sai", chipIn: "Entra",
     owned: "Já tenho", noPrice: "sem preço",
@@ -270,6 +270,7 @@ const I18N = {
     buyLink: "Liga Magic",
     searching: (n) => `Buscando ${n} ${n === 1 ? "carta" : "cartas"} no Scryfall…`,
     done: "Pronto.",
+    pricing: (n, total) => `Procurando a edição mais barata de cada carta… ${n}/${total}`,
     badLines: (l) => `Pronto, mas ignorei ${l.length === 1 ? "a linha" : "as linhas"} ${l.join(", ")}: falta a seta entre as duas cartas.`,
     noArrow: (n) => `Nenhuma linha no formato "Carta X --> Carta Y". Confira a linha ${n}.`,
     noInput: "Escreva pelo menos uma troca, no formato Carta X --> Carta Y.",
@@ -301,7 +302,7 @@ const I18N = {
     deckPh: "e.g. Jace, Multiverse Architect",
     outWord: "Out", inWord: "In",
     go: "Show swaps", share: "Copy link to these swaps",
-    hint: 'The arrow can be <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> or <code>→</code>. If a card was only cut, leave the right side empty (<code>Cancel --&gt;</code>); if one was only added, leave the left side empty (<code>--&gt; Sol Ring</code>). Each side accepts quantity and set, Moxfield style: <code>1 Sol Ring (CMM) 395 *F*</code>. Use English card names. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> also shows the swaps.',
+    hint: 'The arrow can be <code>--&gt;</code>, <code>-&gt;</code>, <code>=&gt;</code> or <code>→</code>. If a card was only cut, leave the right side empty (<code>Cancel --&gt;</code>); if one was only added, leave the left side empty (<code>--&gt; Sol Ring</code>). Each side accepts quantity and set, Moxfield style: <code>1 Sol Ring (CMM) 395 *F*</code>. Incoming cards always show the cheapest printing and its price, whatever set the line names. Use English card names. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> also shows the swaps.',
     emptyState: "Your swaps show up here.",
     sizeLabel: "Card size", sizeS: "S", sizeL: "L",
     sortLabel: "Sort", sortList: "List order", sortPriceDesc: "Price: high to low", sortPriceAsc: "Price: low to high",
@@ -312,7 +313,7 @@ const I18N = {
     buyHint: "Only the cards that came in and aren't marked as owned. Ready to paste into TCGplayer Mass Entry or any decklist tool.",
     copyBuy: "Copy list",
     buyEmpty: "Nothing to buy. You already own everything that came in.",
-    footer: 'Card data, images and prices: <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a>. Prices are a USD reference. Not affiliated with Wizards of the Coast. Magic: The Gathering and its card names and art are property of Wizards of the Coast.',
+    footer: 'Card data, images and prices: <a href="https://scryfall.com" target="_blank" rel="noopener">Scryfall</a>. Prices are a USD reference for the cheapest printing of each card. Not affiliated with Wizards of the Coast. Magic: The Gathering and its card names and art are property of Wizards of the Coast.',
     statSwaps: "Swaps", statBuy: "To buy", statTotal: "Estimated", statMissing: "Not found",
     chipOut: "Out", chipIn: "In",
     owned: "I own it", noPrice: "no price",
@@ -322,6 +323,7 @@ const I18N = {
     buyLink: "TCGplayer",
     searching: (n) => `Looking up ${n} ${n === 1 ? "card" : "cards"} on Scryfall…`,
     done: "Done.",
+    pricing: (n, total) => `Finding the cheapest printing of each card… ${n}/${total}`,
     badLines: (l) => `Done, but I skipped ${l.length === 1 ? "line" : "lines"} ${l.join(", ")}: the arrow between the two cards is missing.`,
     noArrow: (n) => `No line uses the "Card X --> Card Y" format. Check line ${n}.`,
     noInput: "Write at least one swap, as Card X --> Card Y.",
@@ -418,7 +420,41 @@ async function postCollection(identifiers) {
   if (!res.ok) throw new Error(t("scryStatus", res.status));
   return res.json();
 }
-async function lookup(entries) {
+// Scryfall pede no máximo ~10 requisições por segundo: cada chamada reserva um horário
+let nextSlot = 0;
+async function throttle() {
+  const now = Date.now();
+  const at = Math.max(now, nextSlot);
+  nextSlot = at + 110;
+  if (at > now) await sleep(at - now);
+}
+async function pool(list, size, fn) {
+  let i = 0;
+  const worker = async () => { while (i < list.length) { const item = list[i++]; await fn(item); } };
+  await Promise.all(Array.from({ length: Math.min(size, list.length) }, worker));
+}
+const cheapCache = new Map(); // oracle_id/nome -> impressão mais barata (vale enquanto a página estiver aberta)
+const usdOf = (c) => (c?.prices?.usd ? parseFloat(c.prices.usd) : null);
+async function cheapestPrint(card) {
+  const id = card.oracle_id || card.card_faces?.[0]?.oracle_id;
+  const cacheKey = id || norm(card.name);
+  if (cheapCache.has(cacheKey)) return cheapCache.get(cacheKey);
+  // só impressões jogáveis: fora borda dourada (World Championship), Collectors' Edition e cartas gigantes
+  const q = (id ? `oracleid:${id}` : `!"${card.name.split(" // ")[0]}"`) + " usd>0 game:paper -set_type:memorabilia -border:gold -is:oversized";
+  let best = null;
+  try {
+    await throttle();
+    const r = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(q)}&unique=prints&order=usd&dir=asc`, { headers: { Accept: "application/json" } });
+    if (r.ok) {
+      const j = await r.json();
+      for (const c of j.data || []) { if (usdOf(c) != null && (!best || usdOf(c) < usdOf(best))) best = c; }
+    }
+  } catch (_) { /* mantém a impressão encontrada */ }
+  if (best) cheapCache.set(cacheKey, best);
+  return best;
+}
+
+async function lookup(entries, cheapKeys = new Set(), onProgress) {
   const uniq = new Map();
   entries.forEach((e) => { const k = keyOf(e); if (!uniq.has(k)) uniq.set(k, e); });
   const found = new Map();
@@ -432,7 +468,10 @@ async function lookup(entries) {
     const json = await postCollection(ids);
     const idx = indexCards(json.data || []);
     chunk.forEach(([k, e]) => {
-      const c = (e.set && e.cn && idx.byPrint.get(`${e.set}|${e.cn.toLowerCase()}`)) || idx.byName.get(norm(e.name));
+      // coleção + número só valem se a carta encontrada tiver o nome digitado
+      const byNum = e.set && e.cn ? idx.byPrint.get(`${e.set}|${e.cn.toLowerCase()}`) : null;
+      const sameName = byNum && [byNum.name, ...(byNum.card_faces || []).map((f) => f.name)].some((n) => norm(n) === norm(e.name));
+      const c = (sameName && byNum) || idx.byName.get(norm(e.name));
       if (c) found.set(k, c);
     });
     if (i + 75 < items.length) await sleep(120);
@@ -451,15 +490,14 @@ async function lookup(entries) {
       if (r.ok) found.set(k, await r.json());
     } catch (_) { /* segue sem a carta */ }
   }
-  // 3) Sem coleção informada e sem preço: usa a impressão mais barata que tem preço
-  for (const [k] of items.filter(([k, e]) => !e.set && found.has(k) && priceOf(found.get(k)) == null).slice(0, 20)) {
-    await sleep(110);
-    try {
-      const q = `!"${found.get(k).name}" usd>0`;
-      const r = await fetch(`https://api.scryfall.com/cards/search?q=${encodeURIComponent(q)}&unique=prints&order=usd&dir=asc`, { headers: { Accept: "application/json" } });
-      if (r.ok) { const j = await r.json(); if (j.data && j.data[0]) found.set(k, j.data[0]); }
-    } catch (_) { /* mantém a impressão sem preço */ }
-  }
+  // 3) Cartas que entram: sempre a edição mais barata com preço, mesmo que a linha traga coleção
+  const cheapTargets = items.filter(([k]) => cheapKeys.has(k) && found.has(k));
+  let done = 0;
+  await pool(cheapTargets, 4, async ([k]) => {
+    const best = await cheapestPrint(found.get(k));
+    if (best) found.set(k, best);
+    onProgress && onProgress(++done, cheapTargets.length);
+  });
   return found;
 }
 
@@ -1043,7 +1081,8 @@ async function run() {
   $("go").disabled = true;
   status.textContent = t("searching", entries.length);
   try {
-    const found = await lookup(entries);
+    const inKeys = new Set(pairs.filter((p) => p.in).map((p) => keyOf(p.in)));
+    const found = await lookup(entries, inKeys, (n, total) => { status.textContent = t("pricing", n, total); });
     current = { pairs, found };
     render();
     if (bad.length) { status.classList.add("error"); status.textContent = t("badLines", bad); }
